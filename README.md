@@ -1,6 +1,6 @@
 # TubeCatcher
 
-**TubeCatcher**  is a gui application to download videos from YouTube along with YouTube's playlist. I am developing(its under development) it to download YouTube Tutorial videos to play them in offline.
+**TubeCatcher**  is a gui application for Linux and Windows to download videos from YouTube along with YouTube's playlist. I am developing(its under development) it to download YouTube Tutorial videos to play them in offline.
 
 # Operation Manual
 
