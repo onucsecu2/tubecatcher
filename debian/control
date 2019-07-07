@@ -1,0 +1,11 @@
+Source: tubecatcher
+Maintainer: Ibrahim Khalil <onucsecu@gmail.com> 
+Section: utils 
+Priority: optional 
+Standards-Version: 3.9.2 
+Build-Depends: debhelper (>= 9), python2.7 
+
+Package: tubecatcher 
+Architecture: all 
+Depends: python-gi 
+Description: Applications to download videos from Youtube

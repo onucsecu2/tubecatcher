@@ -1,0 +1,121 @@
+#!/usr/bin/python 
+# -*- coding: utf-8 -*- 
+
+## Replace your name and email. 
+# Ibrahim Khalil <onucsecu@gmail.com> 
+
+## Here you must add the license of the file, replace "MyProgram" with your program name. 
+# License: 
+#    MyProgram is free software: you can redistribute it and/or modify 
+#    it under the terms of the GNU General Public License as published by 
+#    the Free Software Foundation, either version 3 of the License, or 
+#    (at your option) any later version. 
+# 
+#    MyProgram is distributed in the hope that it will be useful, 
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of 
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+#    GNU General Public License for more details. 
+# 
+#    You should have received a copy of the GNU General Public License 
+#    along with MyProgram.  If not, see <http://www.gnu.org/licenses/>. 
+
+from __future__ import unicode_literals
+
+import youtube_dl,threading
+import Tkinter as tk
+from pathlib import Path
+
+import os
+if (os.path.exists(os.path.expanduser('~')+'\\TubeCatcher')==False):
+    os.mkdir(os.path.expanduser('~')+'\\TubeCatcher')
+
+path=os.path.expanduser('~')+'\\TubeCatcher\\'
+master = tk.Tk()
+vstr = tk.StringVar()
+t = tk.Text(master,height=2, width=55)
+t.grid( row=5,columnspan=5,sticky='W')
+t.insert(tk.END,"Status: ")
+
+
+def update_status(str):
+    t.delete(1.0,tk.END)
+    t.insert(tk.END, str)
+    #print(str)
+
+
+def my_hook(d):
+    #d['playlist']+'/'+str(d['playlist_index'])+
+    try:
+        update_status(d['status']+' '+d['_percent_str']+' '+d['filename'])
+    except:
+        print("Closed")
+	#t.insert(tk.END, str)
+    #t.insert(tk.END, d['status'])
+    if d['status'] == 'finished':
+        update_status('finished')
+        print('downloading sesh')
+
+st=0
+en=0
+nopl = False
+
+
+def helloCallBack(url,ydl_opts):
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        #print(url)
+        ydl.download([url])
+v = tk.IntVar()
+master.geometry("470x180")
+master.title("YoutubeCatcher")
+tk.Label(master, text="URL").grid(row=0)
+tk.Label(master, text="START").grid(row=1)
+tk.Label(master, text="END").grid(row=1,column=2)
+tk.Label(master, text="Output: "+path).grid(row=3,column=2,columnspan=4)
+e1 = tk.Entry(master)
+e2 = tk.Entry(master)
+e3 = tk.Entry(master)
+e1.grid(row=0,column=1,rowspan=1,columnspan=5,sticky='WE',padx=5)
+
+def showvalue():
+    global nopl
+    if(v.get()==1):
+        e2.config(state='disabled')
+        e3.config(state='disabled')
+        nopl=True
+        print(nopl)
+    if(v.get()==2):
+        e2.config(state='normal')
+        e3.config(state='normal')
+        nopl=False
+        print(nopl)
+tk.Radiobutton(master ,text="Video",variable=v,value=1,command=showvalue).grid(row = 2,column = 0)
+tk.Radiobutton(master ,text="Playlist",variable=v,value=2,command=showvalue).grid(row = 3,column = 0)
+e2.grid(row=1,column=1,columnspan=1,sticky='WS',padx=5)
+e3.grid(row=1,column=3,columnspan=1,sticky='ES',padx=5)
+
+def trnsfer():
+    print(nopl)
+    global st
+    global en
+    url=e1.get()
+    if(nopl==False):
+        st=int(e2.get())
+        en=int(e3.get())
+    else:
+        st=0
+        en=0
+    ydl_opts = {
+        'format': 'best',
+        'outtmpl': path+'%(title)s'+'.%(ext)s',
+        'noplaylist' : nopl,
+        'playliststart' : st,
+        'playlistend'   : en,
+        'progress_hooks': [my_hook],
+    }
+    update_status("Processing...")
+    thread = threading.Thread(target=helloCallBack,args=[url,ydl_opts,])
+    thread.daemon = True
+    thread.start()
+b=tk.Button(master,text="Download",command=trnsfer).grid(row=4,column=1,columnspan=3,sticky='WE')
+master.mainloop()
+

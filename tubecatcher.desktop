@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=TubeCatcher
+Icon=/usr/lib/tubecatcher/TC.png
+Exec=tubecatcher
+Categories=Network;
+Terminal=false
+Comment[en_US]=Youtube Video downloader
