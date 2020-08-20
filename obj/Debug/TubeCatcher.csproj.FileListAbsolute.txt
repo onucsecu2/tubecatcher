@@ -1,0 +1,15 @@
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\bin\Debug\TubeCatcher.exe.config
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\bin\Debug\TubeCatcher.exe
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\bin\Debug\TubeCatcher.pdb
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\TubeCatcher.csprojAssemblyReference.cache
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\MainWindow.g.cs
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\App.g.cs
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\TubeCatcher_MarkupCompile.cache
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\TubeCatcher_MarkupCompile.lref
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\MainWindow.baml
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\TubeCatcher.g.resources
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\TubeCatcher.Properties.Resources.resources
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\TubeCatcher.csproj.GenerateResource.cache
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\TubeCatcher.csproj.CoreCompileInputs.cache
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\TubeCatcher.exe
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\TubeCatcher.pdb
