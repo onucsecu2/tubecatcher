@@ -48,7 +48,7 @@
                 </ListView.View>
             </ListView>
             <ScrollViewer Height="250" Foreground="#FFCBCBCB">
-                <ListView Margin="0,15,0,0"  Name="lvFiles" FontWeight="Bold" FontFamily="Segoe UI Black" Foreground="#FFC3C3C3" BorderBrush="#FF2E2E2E" Background="{x:Null}" >
+                <ListView Margin="0,15,0,0"  Name="lvFiles" FontWeight="Bold" FontFamily="Segoe UI Black" Foreground="#FFC3C3C3" BorderBrush="#FF2E2E2E" Background="{x:Null}" IsSynchronizedWithCurrentItem="False" >
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Width="50" DisplayMemberBinding="{Binding SLNum}" />

@@ -13,3 +13,6 @@ C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\TubeCatcher.csproj
 C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\TubeCatcher.csproj.CoreCompileInputs.cache
 C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\TubeCatcher.exe
 C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\TubeCatcher.pdb
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\bin\Debug\Newtonsoft.Json.dll
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\bin\Debug\Newtonsoft.Json.xml
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\TubeCatcher.csproj.CopyComplete
