@@ -36,18 +36,20 @@
             <Button x:Name="BtnStart" RenderTransformOrigin="0.5,0.5" FontSize="14" Foreground="#FFCBCBCB" Click="Start_Click" Width="129" HorizontalAlignment="Center" Margin="0,15,0,0" BorderBrush="{x:Null}" Background="#FFE26218">
                 <TextBlock Text="Start" HorizontalAlignment="Center" FontFamily="{DynamicResource {x:Static SystemFonts.CaptionFontFamilyKey}}" FontWeight="Bold" />
             </Button>
-            <ListView Margin="0,15,0,0" FontWeight="Bold" FontFamily="Segoe UI Black" Background="White" BorderBrush="#FFC3C3C3">
+            <ScrollViewer Height="250" Foreground="#FFCBCBCB">
+                <ListView Margin="0,15,0,0" FontWeight="Bold" Name="lvFiles" FontFamily="Segoe UI Black" Foreground="#FFC3C3C3"  BorderBrush="#FFC3C3C3" Background="{x:Null}" IsSynchronizedWithCurrentItem="False">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="No" Width="50" />
-                        <GridViewColumn Header="Status" Width="100"/>
-                        <GridViewColumn Header="File" Width="600" />
-                        <GridViewColumn Header="Size" Width="100" />
-                        <GridViewColumn Header="Parcent" Width="100" />
+                        <GridViewColumn Header="No"  Width="50" DisplayMemberBinding="{Binding SLNum}"/>
+                        <GridViewColumn Header="Status" Width="100" DisplayMemberBinding="{Binding Status}"/>
+                        <GridViewColumn Header="File" Width="600" DisplayMemberBinding="{Binding Name}" />
+                        <GridViewColumn Header="Size" Width="100" DisplayMemberBinding="{Binding Size}"  />
+                        <GridViewColumn Header="Percent" Width="100" DisplayMemberBinding="{Binding Percent}" />
                     </GridView>
                 </ListView.View>
             </ListView>
-            <ScrollViewer Height="250" Foreground="#FFCBCBCB">
+            </ScrollViewer>
+            <!--<ScrollViewer Height="250" Foreground="#FFCBCBCB">
                 <ListView Margin="0,15,0,0"  Name="lvFiles" FontWeight="Bold" FontFamily="Segoe UI Black" Foreground="#FFC3C3C3" BorderBrush="#FF2E2E2E" Background="{x:Null}" IsSynchronizedWithCurrentItem="False" >
                     <ListView.View>
                         <GridView>
@@ -55,11 +57,11 @@
                             <GridViewColumn Width="100" DisplayMemberBinding="{Binding Status}" />
                             <GridViewColumn  Width="600" DisplayMemberBinding="{Binding Name}" />
                             <GridViewColumn Width="100" DisplayMemberBinding="{Binding Size}" />
-                            <GridViewColumn  Width="100" DisplayMemberBinding="{Binding Parcent}" />
+                            <GridViewColumn  Width="100" DisplayMemberBinding="{Binding Percent}" />
                         </GridView>
                     </ListView.View>
                 </ListView>
-            </ScrollViewer>
+            </ScrollViewer>-->
             <ScrollViewer Height="200">
                 <TextBlock Name="myTextBlock" TextWrapping="Wrap" FontSize="10" Foreground="#FFBBBBBB"></TextBlock>
             </ScrollViewer>

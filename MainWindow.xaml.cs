@@ -26,6 +26,7 @@ namespace TubeCatcher
     /// </summary>
     public partial class MainWindow : Window
     {
+        string report;
         private ObservableCollection<MyItem> myItem = new ObservableCollection<MyItem>();
         Process pProcess = new Process();
         Process qProcess = new Process();
@@ -44,12 +45,13 @@ namespace TubeCatcher
             startInfo.FileName = "C:\\Program Files\\TubeCatcher\\youtube-dl.exe";
             
             //strCommandParameters are parameters to pass to program
-            startInfo.Arguments = "https://www.youtube.com/playlist?list=PLrryvZ-gdCErP01mLIHNidblxMovnockz -i --get-filename";
+            startInfo.Arguments = "https://www.youtube.com/playlist?list=PLjkWr26KfaWyHiIQCYa0olfWlVQ0j8FaF -i --get-filename";
 
             startInfo.UseShellExecute = false;
             startInfo.CreateNoWindow = true;
             //Set output of program to be written to process output stream
             startInfo.RedirectStandardOutput = true;
+            startInfo.RedirectStandardError = true;
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
             pProcess.StartInfo = startInfo;
@@ -68,10 +70,11 @@ namespace TubeCatcher
             startInfo1.CreateNoWindow = true;
             //Set output of program to be written to process output stream
             startInfo1.RedirectStandardOutput = true;
+            startInfo1.RedirectStandardError = true;
             startInfo1.WindowStyle = ProcessWindowStyle.Hidden;
 
             qProcess.StartInfo = startInfo1;
-            qProcess.StartInfo.Arguments = "https://www.youtube.com/playlist?list=PLrryvZ-gdCErP01mLIHNidblxMovnockz -i";
+            qProcess.StartInfo.Arguments = "https://www.youtube.com/playlist?list=PLjkWr26KfaWyHiIQCYa0olfWlVQ0j8FaF -i";
             thread_youtube_dl_download=new Thread( youtube_dl_download);
             thread_youtube_dl_download.Name = "thread2";
             thread_youtube_dl_download.Start();
@@ -90,11 +93,11 @@ namespace TubeCatcher
                 if (!String.IsNullOrEmpty(e.Data))
                 {
                     //json_str+= e.Data.ToString();
-
-                        this.Dispatcher.Invoke(() =>
+                     
+                    this.Dispatcher.Invoke(() =>
                         {
                             myTextBlock.Text = "Collecting Data...";
-                            myItem.Add(new MyItem { SLNum = i, Status = status_str, Name = e.Data.ToString().ToString(), Size = "--", Parcent = "--" });
+                            myItem.Add(new MyItem { SLNum = i, Status = status_str, Name = e.Data.ToString().ToString(), Size = "--", Percent = "--" });
                             i++;
                         });
               
@@ -119,7 +122,8 @@ namespace TubeCatcher
         {
             thread_youtube_dl_collect_data.Join();
             qProcess.Start();
-            var i = 0;
+            int i = 0;
+            int j=0;
             qProcess.BeginOutputReadLine();
             qProcess.OutputDataReceived += new DataReceivedEventHandler((sender, e) =>
             {
@@ -131,11 +135,36 @@ namespace TubeCatcher
 
                     this.Dispatcher.Invoke(() =>
                     {
-                        myTextBlock.Text = "Downloading";
-                        // MyItem item = (MyItem)lvFiles.Items.GetItemAt(2);0
-                        //item.Status = "Downloading";
-                        MyItem item=(MyItem)myItem.ElementAt(i);
-                        item.Status = "Downloading";
+                        report += e.Data ;
+                        myTextBlock.Text = e.Data;
+                        string[] result = e.Data.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+                        try
+                        {
+                            if (i != 0)
+                            {
+                                j = i - 1;
+                            }
+                            MyItem item = (MyItem)myItem.ElementAt(j);                        
+                            item.Status = "Downloading";
+                            if (e.Data.Contains("[download] Downloading video"))
+                            {
+                                item.Status = "Downloaded";
+                              
+                                i++;
+                            }
+
+                            if (result[2].Contains("of"))
+                            {
+                                item.Percent = result[1];
+                                item.Size = result[3];
+                            }
+
+                        }catch(Exception ec)
+                        {
+                            myTextBlock.Text = e.Data+" "+ec.Message;
+                        }
+
+                        report +=" value_:" +i + " \n";
                     });
                 }
             });
@@ -147,6 +176,8 @@ namespace TubeCatcher
             {
                 myTextBlock.Text = "Finished";
             });
+            //write string to file
+           // File.WriteAllText(@"C:\path1.txt", report);
         }
 
 
@@ -154,7 +185,6 @@ namespace TubeCatcher
         {
 
         }
-
 
 
         private void TextBox_TextChanged_1(object sender, TextChangedEventArgs e)
@@ -167,6 +197,8 @@ public class MyItem : INotifyPropertyChanged
 {
     private string name;
     private string status;
+    private string percent;
+    private string size;
     public int SLNum { get; set; }
 
     public string Name
@@ -195,9 +227,32 @@ public class MyItem : INotifyPropertyChanged
         }
 
     }
-    public string Size { get; set; }
-    public string Parcent { get; set; }
+    public string Percent
+    {
+        get { return this.percent; }
+        set
+        {
+            if (this.percent != value)
+            {
+                this.percent = value;
+                this.NotifyPropertyChanged("Percent");
+            }
+        }
 
+    }
+    public string Size
+    {
+        get { return this.size; }
+        set
+        {
+            if (this.size != value)
+            {
+                this.size = value;
+                this.NotifyPropertyChanged("Size");
+            }
+        }
+
+    }
     public event PropertyChangedEventHandler PropertyChanged;
     public void NotifyPropertyChanged(string propName)
     {
