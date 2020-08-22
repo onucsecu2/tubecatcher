@@ -25,11 +25,11 @@
                 </StackPanel >
                 <StackPanel  Margin="0,0,20,0"  Orientation="Horizontal">
                     <TextBlock Margin="0,0,10,0" Foreground="#FFCDCDCD" FontWeight="Bold" FontFamily="Segoe UI Black"><Run Text="Start"/></TextBlock>
-                    <TextBox x:Name="start_num" Width="70" Margin="0,0,0,0" Background="#FF6C6C6C" BorderBrush="#FF6C6C6C" TextChanged="TextBox_TextChanged" />
+                    <TextBox x:Name="start_num" Width="70" Margin="0,0,0,0" Background="#FF6C6C6C" BorderBrush="#FF6C6C6C"/>
                 </StackPanel>
                 <StackPanel  Orientation="Horizontal">
                     <TextBlock Margin="0,0,10,0" FontWeight="Bold" FontFamily="Segoe UI Black" Foreground="#FFCDCDCD"><Run Text="End"/></TextBlock>
-                    <TextBox x:Name="end_name" Width="70" Margin="0,0,0,0" RenderTransformOrigin="1.571,0.444" BorderBrush="#FF6C6C6C" Background="#FF6C6C6C" TextChanged="TextBox_TextChanged_1" />
+                    <TextBox x:Name="end_name" Width="70" Margin="0,0,0,0" RenderTransformOrigin="1.571,0.444" BorderBrush="#FF6C6C6C" Background="#FF6C6C6C" />
                 </StackPanel>
             </StackPanel>
             <ProgressBar Minimum="0" Maximum="100" Height="17" Value="45" Margin="0,15,0,0" Foreground="#FF00A61E" Background="White"></ProgressBar>
@@ -37,7 +37,7 @@
                 <TextBlock Text="Start" HorizontalAlignment="Center" FontFamily="{DynamicResource {x:Static SystemFonts.CaptionFontFamilyKey}}" FontWeight="Bold" />
             </Button>
             <ScrollViewer Height="250" Foreground="#FFCBCBCB">
-                <ListView Margin="0,15,0,0" FontWeight="Bold" Name="lvFiles" FontFamily="Segoe UI Black" Foreground="#FFC3C3C3"  BorderBrush="#FFC3C3C3" Background="{x:Null}" IsSynchronizedWithCurrentItem="False">
+                <ListView Margin="0,15,0,0"  Name="lvFiles" FontFamily="Segoe UI Black" Foreground="#FFC3C3C3"  BorderBrush="#FFC3C3C3" Background="{x:Null}" IsSynchronizedWithCurrentItem="False">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="No"  Width="50" DisplayMemberBinding="{Binding SLNum}"/>

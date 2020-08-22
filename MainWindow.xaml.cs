@@ -39,13 +39,13 @@ namespace TubeCatcher
 
         private void Start_Click(object sender, RoutedEventArgs e)
         {
-
+            string url_str = url.Text;
             ProcessStartInfo startInfo = new ProcessStartInfo();
             //strCommand is path and file name of command to run
             startInfo.FileName = "C:\\Program Files\\TubeCatcher\\youtube-dl.exe";
             
             //strCommandParameters are parameters to pass to program
-            startInfo.Arguments = "https://www.youtube.com/playlist?list=PLjkWr26KfaWyHiIQCYa0olfWlVQ0j8FaF -i --get-filename";
+            startInfo.Arguments = url_str+" -i --get-filename";
 
             startInfo.UseShellExecute = false;
             startInfo.CreateNoWindow = true;
@@ -74,7 +74,7 @@ namespace TubeCatcher
             startInfo1.WindowStyle = ProcessWindowStyle.Hidden;
 
             qProcess.StartInfo = startInfo1;
-            qProcess.StartInfo.Arguments = "https://www.youtube.com/playlist?list=PLjkWr26KfaWyHiIQCYa0olfWlVQ0j8FaF -i";
+            qProcess.StartInfo.Arguments = url_str+" -i";
             thread_youtube_dl_download=new Thread( youtube_dl_download);
             thread_youtube_dl_download.Name = "thread2";
             thread_youtube_dl_download.Start();
@@ -92,8 +92,7 @@ namespace TubeCatcher
                 // Prepend line numbers to each line of the output.
                 if (!String.IsNullOrEmpty(e.Data))
                 {
-                    //json_str+= e.Data.ToString();
-                     
+                    report += e.Data + "\n";    
                     this.Dispatcher.Invoke(() =>
                         {
                             myTextBlock.Text = "Collecting Data...";
@@ -146,15 +145,20 @@ namespace TubeCatcher
                             }
                             MyItem item = (MyItem)myItem.ElementAt(j);                        
                             item.Status = "Downloading";
-                            if (e.Data.Contains("[download] Downloading video"))
-                            {
-                                item.Status = "Downloaded";
+                            //if (e.Data.Contains("[download] Downloading video"))
+                            //{
+                            //    item.Status = "Downloaded";
                               
-                                i++;
-                            }
+                            //    i++;
+                            //}
 
                             if (result[2].Contains("of"))
                             {
+                                if (result[1].Contains("100.0%"))
+                                {
+                                    item.Status = "Downloaded";
+                                    i++;
+                                }
                                 item.Percent = result[1];
                                 item.Size = result[3];
                             }
@@ -164,7 +168,7 @@ namespace TubeCatcher
                             myTextBlock.Text = e.Data+" "+ec.Message;
                         }
 
-                        report +=" value_:" +i + " \n";
+                        report +=" \n";
                     });
                 }
             });
@@ -177,19 +181,7 @@ namespace TubeCatcher
                 myTextBlock.Text = "Finished";
             });
             //write string to file
-           // File.WriteAllText(@"C:\path1.txt", report);
-        }
-
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-
-        private void TextBox_TextChanged_1(object sender, TextChangedEventArgs e)
-        {
-
+            File.WriteAllText(@"C:\path1.txt", report);
         }
     }
 }
