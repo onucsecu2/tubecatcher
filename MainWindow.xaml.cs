@@ -95,7 +95,6 @@ namespace TubeCatcher
             thread_move_downloaded_files.Name = "thread3";
             //thread_move_downloaded_files.Start();
         }
-
         private void youtube_dl_collect_data(string status_str)
         {
             pProcess.Start();
@@ -220,8 +219,7 @@ namespace TubeCatcher
             end_num.IsEnabled = false;
             end_num.Clear();
             state = 0;
-
-
+            reactivate();
         }
         private void initialize()
         {
@@ -239,7 +237,6 @@ namespace TubeCatcher
                 BtnStart.IsEnabled = true;
                 BtnStop.IsEnabled = false;
             });
-
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
@@ -253,6 +250,11 @@ namespace TubeCatcher
             start_num.IsEnabled = true;
             end_num.IsEnabled = true;
             state = 1;
+            this.Dispatcher.Invoke(() =>
+            {
+                BtnStart.IsEnabled = false;
+                BtnStop.IsEnabled = false;
+            });
 
         }
 
@@ -312,6 +314,39 @@ namespace TubeCatcher
 
             });
             myItem.Clear();
+        }
+
+        private void end_num_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            int start=0, end=0;
+            try
+            {
+                start = Int32.Parse(start_num.Text);
+            }
+            catch (Exception exc)
+            {
+                report += exc.Message + "\n";
+            }
+            try
+            {
+                end = Int32.Parse(end_num.Text);
+            }catch(Exception exc)
+            {
+                report += exc.Message + "\n";
+            }
+            if (end > start)
+            {
+                reactivate();
+            }
+            else
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    BtnStart.IsEnabled = false;
+                    BtnStop.IsEnabled = false;
+                });
+            }
+
         }
 
         private void move_files()
