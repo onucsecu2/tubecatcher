@@ -1,23 +1,15 @@
-﻿using Newtonsoft.Json.Linq;
+﻿
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace TubeCatcher
 {
@@ -26,26 +18,48 @@ namespace TubeCatcher
     /// </summary>
     public partial class MainWindow : Window
     {
+        string args1;
+        string args2;
         string report;
+        string path;
+        int state;
+        string youtube_dl = "C:\\Users\\onucs\\source\\repos\\TubeCatcher\\TubeCatcher\\bin\\Debug\\youtube-dl.exe";
         private ObservableCollection<MyItem> myItem = new ObservableCollection<MyItem>();
-        Process pProcess = new Process();
-        Process qProcess = new Process();
-        static Thread thread_youtube_dl_download, thread_youtube_dl_collect_data;
+        Process pProcess; 
+        Process qProcess; 
+        static Thread thread_youtube_dl_download, thread_youtube_dl_collect_data,thread_move_downloaded_files;
         public MainWindow()
         {
             InitializeComponent();
             lvFiles.ItemsSource = myItem;
+            BtnStop.IsEnabled = false;
+            path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            path += "\\Videos";
+            this.Dispatcher.Invoke(() =>
+            {
+                myTextBlock.Text = path;
+            });
         }
 
         private void Start_Click(object sender, RoutedEventArgs e)
         {
-            string url_str = url.Text;
+            initialize();
+            if (state == 0)
+            {
+                args1 = url.Text + " -i --get-filename";
+                args2 = url.Text + " -i";
+            }
+            else
+            {
+                args1 = url.Text + " -i --playlist-start " + start_num.Text.ToString() + " --playlist-end " + end_num.Text.ToString() + " --get-filename";
+                args2 = url.Text + " -i --playlist-start " + start_num.Text + " --playlist-end " + end_num.Text;
+            }
             ProcessStartInfo startInfo = new ProcessStartInfo();
             //strCommand is path and file name of command to run
-            startInfo.FileName = "C:\\Program Files\\TubeCatcher\\youtube-dl.exe";
+            startInfo.FileName = youtube_dl;
             
             //strCommandParameters are parameters to pass to program
-            startInfo.Arguments = url_str+" -i --get-filename";
+            startInfo.Arguments = args1;
 
             startInfo.UseShellExecute = false;
             startInfo.CreateNoWindow = true;
@@ -64,27 +78,29 @@ namespace TubeCatcher
 
             ProcessStartInfo startInfo1 = new ProcessStartInfo();
             //strCommand is path and file name of command to run
-            startInfo1.FileName = "C:\\Program Files\\TubeCatcher\\youtube-dl.exe";
-
+            startInfo1.FileName = youtube_dl;
             startInfo1.UseShellExecute = false;
             startInfo1.CreateNoWindow = true;
             //Set output of program to be written to process output stream
             startInfo1.RedirectStandardOutput = true;
             startInfo1.RedirectStandardError = true;
             startInfo1.WindowStyle = ProcessWindowStyle.Hidden;
-
             qProcess.StartInfo = startInfo1;
-            qProcess.StartInfo.Arguments = url_str+" -i";
+            qProcess.StartInfo.Arguments = args2;
             thread_youtube_dl_download=new Thread( youtube_dl_download);
             thread_youtube_dl_download.Name = "thread2";
             thread_youtube_dl_download.Start();
 
+            thread_move_downloaded_files = new Thread(move_files);
+            thread_move_downloaded_files.Name = "thread3";
+            //thread_move_downloaded_files.Start();
         }
 
         private void youtube_dl_collect_data(string status_str)
         {
             pProcess.Start();
-            var i = 1;
+            int i = 1;
+            
             pProcess.BeginOutputReadLine();
             pProcess.OutputDataReceived += new DataReceivedEventHandler((sender, e) =>
             {
@@ -95,10 +111,11 @@ namespace TubeCatcher
                     report += e.Data + "\n";    
                     this.Dispatcher.Invoke(() =>
                         {
+                           
                             myTextBlock.Text = "Collecting Data...";
                             myItem.Add(new MyItem { SLNum = i, Status = status_str, Name = e.Data.ToString().ToString(), Size = "--", Percent = "--" });
                             i++;
-                        });
+                    });
               
 
                 }
@@ -115,62 +132,55 @@ namespace TubeCatcher
             //System.IO.File.WriteAllText(@"C:\path.txt", json_str);
 
         }
-
-
         private void youtube_dl_download()
         {
             thread_youtube_dl_collect_data.Join();
             qProcess.Start();
             int i = 0;
-            int j=0;
+            int j = 0;
             qProcess.BeginOutputReadLine();
             qProcess.OutputDataReceived += new DataReceivedEventHandler((sender, e) =>
             {
-
-                // Prepend line numbers to each line of the output.
+            // Prepend line numbers to each line of the output.
                 if (!String.IsNullOrEmpty(e.Data))
                 {
-                    //json_str+= e.Data.ToString();
-
-                    this.Dispatcher.Invoke(() =>
+                    try 
                     {
-                        report += e.Data ;
-                        myTextBlock.Text = e.Data;
-                        string[] result = e.Data.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
-                        try
+                        report += e.Data;
+                        this.Dispatcher.Invoke(() =>
                         {
-                            if (i != 0)
-                            {
-                                j = i - 1;
-                            }
-                            MyItem item = (MyItem)myItem.ElementAt(j);                        
-                            item.Status = "Downloading";
-                            //if (e.Data.Contains("[download] Downloading video"))
-                            //{
-                            //    item.Status = "Downloaded";
-                              
-                            //    i++;
-                            //}
+                            myTextBlock.Text = e.Data;
+                        });
+                        string[] result = e.Data.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+                        MyItem item = item = (MyItem)myItem.ElementAt(i);
 
-                            if (result[2].Contains("of"))
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            item.Status = "Downloading";
+                        });
+                        if (result[2].Contains("of"))
+                        {
+                            if (result[1].Contains("100%"))
                             {
-                                if (result[1].Contains("100.0%"))
+                                this.Dispatcher.Invoke(() =>
                                 {
                                     item.Status = "Downloaded";
-                                    i++;
-                                }
-                                item.Percent = result[1];
-                                item.Size = result[3];
+                                });
+
+                                i++;
                             }
-
-                        }catch(Exception ec)
-                        {
-                            myTextBlock.Text = e.Data+" "+ec.Message;
+                            item.Percent = result[1];
+                            item.Size = result[3];
                         }
+                        report += " \n";
+                    }
+                    catch(Exception exc)
+                    {
+                        report += exc.Message + "\n";
+                    }
 
-                        report +=" \n";
-                    });
-                }
+                 }
+                    
             });
 
             qProcess.WaitForExit();
@@ -181,7 +191,142 @@ namespace TubeCatcher
                 myTextBlock.Text = "Finished";
             });
             //write string to file
-            File.WriteAllText(@"C:\path1.txt", report);
+            File.WriteAllText(@"C:\Program Files\Y_DL\TubeCatcher\report.log", report);
+        }
+        private void url_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string str=url.Text;
+            this.Dispatcher.Invoke(() =>
+            {
+                if (str.Contains("https://www.youtube.com/playlist?list"))
+                {
+                    myTextBlock.Text = "Playlist detected";
+                    playlist.IsEnabled = true;
+                    playlist.IsChecked = true;
+                }
+                else
+                {
+                    myTextBlock.Text = "Playlist not detected";
+                    playlist.IsEnabled = false;
+                    playlist.IsChecked = false;
+                }
+                    
+            });
+        }
+        private void playlist_Checked(object sender, RoutedEventArgs e)
+        {
+            start_num.IsEnabled = false;
+            start_num.Clear();
+            end_num.IsEnabled = false;
+            end_num.Clear();
+            state = 0;
+
+
+        }
+        private void initialize()
+        {
+            pProcess = new Process();
+            qProcess = new Process();
+            report = null;
+            myItem.Clear();
+            BtnStart.IsEnabled = false;
+            BtnStop.IsEnabled = true;
+        }
+        private void reactivate()
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                BtnStart.IsEnabled = true;
+                BtnStop.IsEnabled = false;
+            });
+
+        }
+
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void playlist_Unchecked(object sender, RoutedEventArgs e)
+        {
+            start_num.IsEnabled = true;
+            end_num.IsEnabled = true;
+            state = 1;
+
+        }
+
+        private void Stop_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                thread_move_downloaded_files.Abort();
+            }
+            catch (Exception exc)
+            {
+                report += exc.Message + "\n";
+            }
+            try
+            {
+                qProcess.CancelOutputRead();
+                qProcess.Close();
+            }catch(Exception ex)
+            {
+                report += ex.Message + "\n" ;
+            }
+            try { 
+                thread_youtube_dl_download.Abort();
+            }
+            catch (Exception ex)
+            {
+                report += ex.Message + "\n";
+            }
+
+
+            try
+            {
+                pProcess.CancelOutputRead();
+                pProcess.Close();
+            }
+            catch (Exception ex)
+            {
+                report += ex.Message + "\n";
+            }
+            try
+            {
+                thread_youtube_dl_collect_data.Abort();
+            }
+            catch (Exception ex)
+            {
+                report += ex.Message + "\n";
+            }
+
+            this.Dispatcher.Invoke(() =>
+            {
+                myTextBlock.Text = "Process Terminated !";
+            });
+            this.Dispatcher.Invoke(() =>
+            {
+                BtnStart.IsEnabled = true;
+                BtnStop.IsEnabled = false;
+
+            });
+            myItem.Clear();
+        }
+
+        private void move_files()
+        {
+            thread_youtube_dl_download.Join();
+            foreach(MyItem item in myItem)
+            {
+                moveFile(item.Name);
+            }
+            reactivate();
+        }
+        private void moveFile(string sourceFile)
+        {
+            string destinationFile = path +"\\"+sourceFile;
+            File.Move(sourceFile, destinationFile);
         }
     }
 }

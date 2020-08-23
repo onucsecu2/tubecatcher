@@ -15,29 +15,34 @@
             <ColumnDefinition Width="400*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical" Grid.ColumnSpan="3" Background="#FF3A3A3A">
-            <TextBox x:Name="url" Margin="0,15,0,0" Background="#FF878787" Foreground="White" Height="90"/>
+            <TextBox x:Name="url" Margin="0,15,0,0" Background="#FF878787" Foreground="White" Height="90" TextChanged="url_TextChanged" />
             <Label Margin="0,20,0,0" Content="Playlist Information :" Cursor="No" FontFamily="Segoe UI Black" FontWeight="Bold" Background="{x:Null}" Foreground="#FFCDCDCD" />
             <StackPanel  Orientation="Horizontal" HorizontalAlignment="Center" Grid.ColumnSpan="1" >
                 <StackPanel Margin="0,0,30,0" Orientation="Horizontal" HorizontalAlignment="Left" >
-                    <CheckBox Background="Gray" HorizontalAlignment="Center">
+                    <CheckBox IsEnabled="False" Checked="playlist_Checked" Unchecked="playlist_Unchecked" x:Name="playlist" Background="Gray" HorizontalAlignment="Center">
                         <TextBlock FontWeight="Bold" FontFamily="Segoe UI Black" Foreground="#FF2CA000"><Run Text="All"/></TextBlock>
                     </CheckBox>
                 </StackPanel >
                 <StackPanel  Margin="0,0,20,0"  Orientation="Horizontal">
                     <TextBlock Margin="0,0,10,0" Foreground="#FFCDCDCD" FontWeight="Bold" FontFamily="Segoe UI Black"><Run Text="Start"/></TextBlock>
-                    <TextBox x:Name="start_num" Width="70" Margin="0,0,0,0" Background="#FF6C6C6C" BorderBrush="#FF6C6C6C"/>
+                    <TextBox IsEnabled="False" x:Name="start_num" Width="70" Margin="0,0,0,0" Background="#FF6C6C6C" BorderBrush="#FF6C6C6C" PreviewTextInput="NumberValidationTextBox"/>
                 </StackPanel>
                 <StackPanel  Orientation="Horizontal">
                     <TextBlock Margin="0,0,10,0" FontWeight="Bold" FontFamily="Segoe UI Black" Foreground="#FFCDCDCD"><Run Text="End"/></TextBlock>
-                    <TextBox x:Name="end_name" Width="70" Margin="0,0,0,0" RenderTransformOrigin="1.571,0.444" BorderBrush="#FF6C6C6C" Background="#FF6C6C6C" />
+                    <TextBox IsEnabled="False" x:Name="end_num"  Width="70" Margin="0,0,0,0" RenderTransformOrigin="1.571,0.444" BorderBrush="#FF6C6C6C" Background="#FF6C6C6C" PreviewTextInput="NumberValidationTextBox" />
                 </StackPanel>
             </StackPanel>
-            <ProgressBar Minimum="0" Maximum="100" Height="17" Value="45" Margin="0,15,0,0" Foreground="#FF00A61E" Background="White"></ProgressBar>
-            <Button x:Name="BtnStart" RenderTransformOrigin="0.5,0.5" FontSize="14" Foreground="#FFCBCBCB" Click="Start_Click" Width="129" HorizontalAlignment="Center" Margin="0,15,0,0" BorderBrush="{x:Null}" Background="#FFE26218">
-                <TextBlock Text="Start" HorizontalAlignment="Center" FontFamily="{DynamicResource {x:Static SystemFonts.CaptionFontFamilyKey}}" FontWeight="Bold" />
-            </Button>
-            <ScrollViewer Height="250" Foreground="#FFCBCBCB">
-                <ListView Margin="0,15,0,0"  Name="lvFiles" FontFamily="Segoe UI Black" Foreground="#FFC3C3C3"  BorderBrush="#FFC3C3C3" Background="{x:Null}" IsSynchronizedWithCurrentItem="False">
+            <ProgressBar Minimum="0" Maximum="100" Height="17" Value="45" Margin="0,15,0,0" Foreground="#FF00BB33" Background="#FF6C6C6C" BorderBrush="{x:Null}"></ProgressBar>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="BtnStart" RenderTransformOrigin="0.5,0.5" FontSize="14" Foreground="#FFCBCBCB" Click="Start_Click" Width="129" HorizontalAlignment="Center" Margin="0,15,20,0" BorderBrush="{x:Null}" Background="#FF158703">
+                    <TextBlock Text="Start" HorizontalAlignment="Center" FontFamily="{DynamicResource {x:Static SystemFonts.CaptionFontFamilyKey}}" FontWeight="Bold" />
+                </Button>
+                <Button x:Name="BtnStop" RenderTransformOrigin="0.5,0.5" FontSize="14" Foreground="#FFF38181" Click="Stop_Click" Width="129" HorizontalAlignment="Center" Margin="0,15,0,0" BorderBrush="{x:Null}" Background="#FF950C0C">
+                    <TextBlock Text="Stop" HorizontalAlignment="Center" FontFamily="{DynamicResource {x:Static SystemFonts.CaptionFontFamilyKey}}" FontWeight="Bold" />
+                </Button>
+            </StackPanel>
+            <ScrollViewer Height="250" Foreground="#FFCBCBCB" Margin="0">
+                <ListView  Name="lvFiles" FontFamily="Segoe UI Black" Foreground="#FFC3C3C3"  BorderBrush="#FFC3C3C3" Background="{x:Null}" IsSynchronizedWithCurrentItem="False" Margin="0,15,0,0">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="No"  Width="50" DisplayMemberBinding="{Binding SLNum}"/>

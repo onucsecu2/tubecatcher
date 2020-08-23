@@ -1,0 +1,17 @@
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\bin\Release\TubeCatcher.exe.config
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\bin\Release\TubeCatcher.exe
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\bin\Release\TubeCatcher.pdb
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\bin\Release\Newtonsoft.Json.dll
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\bin\Release\Newtonsoft.Json.xml
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Release\MainWindow.g.cs
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Release\App.g.cs
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Release\TubeCatcher_MarkupCompile.cache
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Release\TubeCatcher_MarkupCompile.lref
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Release\MainWindow.baml
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Release\TubeCatcher.g.resources
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Release\TubeCatcher.Properties.Resources.resources
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Release\TubeCatcher.csproj.GenerateResource.cache
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Release\TubeCatcher.csproj.CoreCompileInputs.cache
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Release\TubeCatcher.csproj.CopyComplete
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Release\TubeCatcher.exe
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Release\TubeCatcher.pdb
