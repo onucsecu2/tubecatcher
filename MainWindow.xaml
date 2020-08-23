@@ -29,7 +29,7 @@
                 </StackPanel>
                 <StackPanel  Orientation="Horizontal">
                     <TextBlock Margin="0,0,10,0" FontWeight="Bold" FontFamily="Segoe UI Black" Foreground="#FFCDCDCD"><Run Text="End"/></TextBlock>
-                    <TextBox IsEnabled="False" x:Name="end_num"  Width="70" Margin="0,0,0,0" RenderTransformOrigin="1.571,0.444" BorderBrush="#FF6C6C6C" Background="#FF6C6C6C" PreviewTextInput="NumberValidationTextBox" />
+                    <TextBox IsEnabled="False" x:Name="end_num"  Width="70" Margin="0,0,0,0" RenderTransformOrigin="1.571,0.444" BorderBrush="#FF6C6C6C" Background="#FF6C6C6C" PreviewTextInput="NumberValidationTextBox" TextChanged="end_num_TextChanged" />
                 </StackPanel>
             </StackPanel>
             <ProgressBar Minimum="0" Maximum="100" Height="17" Value="45" Margin="0,15,0,0" Foreground="#FF00BB33" Background="#FF6C6C6C" BorderBrush="{x:Null}"></ProgressBar>
