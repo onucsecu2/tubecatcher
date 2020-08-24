@@ -41,6 +41,7 @@ namespace TubeCatcher
             InitializeComponent();
             lvFiles.ItemsSource = myItem;
             BtnStop.IsEnabled = false;
+            BtnRetry.IsEnabled = false;
             path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             path += "\\Videos";
             this.Dispatcher.Invoke(() =>
@@ -109,6 +110,8 @@ namespace TubeCatcher
             thread_move_downloaded_files.Name = "thread3";
             thread_move_downloaded_files.Start();
         }
+
+
         private void youtube_dl_collect_data(string status_str)
         {
 
@@ -162,7 +165,7 @@ namespace TubeCatcher
             qProcess.Start();
             //qProcess.StandardInput.WriteLine("chcp 65001");
             int i = 0;
-            int j = 0;
+
             qProcess.BeginOutputReadLine();
             qProcess.OutputDataReceived += new DataReceivedEventHandler((sender, e) =>
             {
@@ -216,11 +219,23 @@ namespace TubeCatcher
 
             qProcess.WaitForExit();
             qProcess.CancelOutputRead();
-
-            this.Dispatcher.Invoke(() =>
+            if (myItem.Count == i)
             {
-                myTextBlock.Text = "Finished";
-            });
+                this.Dispatcher.Invoke(() =>
+                {
+                    myTextBlock.Text = "Downloaded";
+                });
+            }
+            else
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    BtnRetry.IsEnabled = true;
+                    myTextBlock.Text = "Retry!!!";
+                });
+               
+                thread_move_downloaded_files.Abort();
+            }
             //write string to file
 
         }
@@ -304,25 +319,7 @@ namespace TubeCatcher
             }
             try
             {
-                qProcess.CancelOutputRead();
-                qProcess.Close();
-            }catch(Exception ex)
-            {
-                report += ex.Message + "\n" ;
-            }
-            try { 
                 thread_youtube_dl_download.Abort();
-            }
-            catch (Exception ex)
-            {
-                report += ex.Message + "\n";
-            }
-
-
-            try
-            {
-                pProcess.CancelOutputRead();
-                pProcess.Close();
             }
             catch (Exception ex)
             {
@@ -337,6 +334,47 @@ namespace TubeCatcher
                 report += ex.Message + "\n";
             }
 
+
+            try
+            {
+                qProcess.Kill();
+            }
+            catch(Exception ex)
+            {
+                report += ex.Message + "\n" ;
+            }
+            try
+            {
+                qProcess.CancelOutputRead();
+            }
+            catch (Exception ex)
+            {
+                report += ex.Message + "\n";
+            }
+
+
+            try
+            {
+                
+                pProcess.CancelOutputRead();
+            }
+            catch (Exception ex)
+            {
+                report += ex.Message + "\n";
+            }
+            try
+            {
+
+                pProcess.Kill();
+            }
+            catch (Exception ex)
+            {
+                report += ex.Message + "\n";
+            }
+
+
+
+
             this.Dispatcher.Invoke(() =>
             {
                 myTextBlock.Text = "Process Terminated !";
@@ -346,6 +384,7 @@ namespace TubeCatcher
                 BtnStart.IsEnabled = true;
                 BtnStop.IsEnabled = false;
                 progressbar.IsIndeterminate = false;
+                progressbar.Value = 0;
             });
                 myItem.Clear();
         }
@@ -383,22 +422,46 @@ namespace TubeCatcher
 
         }
 
+        private void BtnRetry_Click(object sender, RoutedEventArgs e)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                BtnRetry.IsEnabled = false;
+                BtnStart.IsEnabled = false;
+                BtnStop.IsEnabled = true;
+            });
+
+            ProcessStartInfo startInfo1 = new ProcessStartInfo();
+            //strCommand is path and file name of command to run
+            startInfo1.FileName = youtube_dl;
+            startInfo1.UseShellExecute = false;
+            startInfo1.CreateNoWindow = true;
+            //Set output of program to be written to process output stream
+            startInfo1.RedirectStandardOutput = true;
+            startInfo1.RedirectStandardError = true;
+            startInfo1.WindowStyle = ProcessWindowStyle.Hidden;
+            qProcess.StartInfo = startInfo1;
+            qProcess.StartInfo.Arguments = args2;
+            thread_youtube_dl_download = new Thread(youtube_dl_download);
+            thread_youtube_dl_download.Name = "thread2";
+            thread_youtube_dl_download.Start();
+
+            thread_move_downloaded_files = new Thread(move_files);
+            thread_move_downloaded_files.Name = "thread3";
+            thread_move_downloaded_files.Start();
+        }
+
         private void move_files()
         {
             
             thread_youtube_dl_download.Join();
             report += "started moving.....\n";
-            //foreach (MyItem item in myItem)
-            //{
-            //    moveFile(item.Name);
-            //}
-            moveFile();
-            File.WriteAllText(@"report.log", report);
-            reactivate();
-        }
-        private void moveFile()
-        {
 
+            this.Dispatcher.Invoke(() =>
+            {
+                myTextBlock.Text = "Moving...";
+                progressbar.IsIndeterminate = true;
+            });
             string source_dir = Directory.GetCurrentDirectory();
             string directoryName = path;
             DirectoryInfo dirInfo = new DirectoryInfo(directoryName);
@@ -412,21 +475,25 @@ namespace TubeCatcher
             {
                 FileInfo mFile = new FileInfo(file);
                 // to remove name collisions
-                
-                //if (files.Exists(e=>e.Contains(Path.GetFileNameWithoutExtension(mFile.Name))))
-                //{
-                    if (new FileInfo(dirInfo + "\\" + mFile.Name).Exists == false)
-                    {
-                        mFile.MoveTo(dirInfo + "\\" + mFile.Name);
-                    }
-                    else
-                    {
-                        File.Delete(mFile.Name);
-                    }
-                //}
-            }
+                if (new FileInfo(dirInfo + "\\" + mFile.Name).Exists == false)
+                {
+                    mFile.MoveTo(dirInfo + "\\" + mFile.Name);
+                }
+                else
+                {
+                    File.Delete(mFile.Name);
+                }
 
+            }
+            this.Dispatcher.Invoke(() =>
+            {
+                myTextBlock.Text = "Finished";
+                progressbar.IsIndeterminate = false;
+            });
+            File.WriteAllText(@"report.log", report);
+            reactivate();
         }
+
     }
 }
 public class MyItem : INotifyPropertyChanged

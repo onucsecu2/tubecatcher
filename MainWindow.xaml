@@ -40,8 +40,11 @@
                 <Button x:Name="BtnStart" RenderTransformOrigin="0.5,0.5" FontSize="14" Foreground="#FFCBCBCB" Click="Start_Click" Width="129" HorizontalAlignment="Center" Margin="0,15,20,0" BorderBrush="{x:Null}" Background="#FF158703">
                     <TextBlock Text="Start" HorizontalAlignment="Center" FontFamily="{DynamicResource {x:Static SystemFonts.CaptionFontFamilyKey}}" FontWeight="Bold" />
                 </Button>
-                <Button x:Name="BtnStop" RenderTransformOrigin="0.5,0.5" FontSize="14" Foreground="#FFF38181" Click="Stop_Click" Width="129" HorizontalAlignment="Center" Margin="0,15,0,0" BorderBrush="{x:Null}" Background="#FF950C0C">
-                    <TextBlock Text="Stop" HorizontalAlignment="Center" FontFamily="{DynamicResource {x:Static SystemFonts.CaptionFontFamilyKey}}" FontWeight="Bold" />
+                <Button x:Name="BtnStop" RenderTransformOrigin="0.5,0.5" FontSize="14" Foreground="#FFF38181" Click="Stop_Click" Width="129" HorizontalAlignment="Center" Margin="0,15,20,0" BorderBrush="{x:Null}" Background="#FF950C0C">
+                    <TextBlock Text="Cancel" HorizontalAlignment="Center" FontFamily="{DynamicResource {x:Static SystemFonts.CaptionFontFamilyKey}}" FontWeight="Bold" />
+                </Button>
+                <Button x:Name="BtnRetry" RenderTransformOrigin="0.5,0.5" FontSize="14" Foreground="#FF232304"  Width="129" HorizontalAlignment="Center" Margin="0,15,0,0" BorderBrush="{x:Null}" Background="#FFFFF800" Click="BtnRetry_Click">
+                    <TextBlock Text="Retry" HorizontalAlignment="Center" FontFamily="{DynamicResource {x:Static SystemFonts.CaptionFontFamilyKey}}" FontWeight="Bold" />
                 </Button>
             </StackPanel>
             <ScrollViewer Height="250" Foreground="#FFCBCBCB" Margin="0">
