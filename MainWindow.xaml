@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TubeCatcher"
         mc:Ignorable="d"
         
-        Title="TubeCatcher 1.0" Height="600" Width="1000" Background="#FF3A3A3A">
+        Title="TubeCatcher 1.0" Height="600" Width="1000" Background="#FF3A3A3A" Icon="tc.ico">
 
     <Grid Background="#FF131313" Margin="10,10,10,10">
         <Grid.ColumnDefinitions>
@@ -32,13 +32,19 @@
                     <TextBox IsEnabled="False" x:Name="end_num"  Width="70" Margin="0,0,0,0" RenderTransformOrigin="1.571,0.444" BorderBrush="#FF6C6C6C" Background="#FF6C6C6C" PreviewTextInput="NumberValidationTextBox" TextChanged="end_num_TextChanged" />
                 </StackPanel>
             </StackPanel>
-            <ProgressBar Minimum="0" Maximum="100" Height="17" Value="45" Margin="0,15,0,0" Foreground="#FF00BB33" Background="#FF6C6C6C" BorderBrush="{x:Null}"></ProgressBar>
+            <Grid Margin="0,15,0,0">
+            <ProgressBar x:Name="progressbar" Minimum="0" Maximum="100" Height="17" Value="0"  Foreground="#FF00BB33" Background="#FF6C6C6C" BorderBrush="{x:Null}"></ProgressBar>
+            <TextBlock Text="{Binding ElementName=pbStatus, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Grid>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button x:Name="BtnStart" RenderTransformOrigin="0.5,0.5" FontSize="14" Foreground="#FFCBCBCB" Click="Start_Click" Width="129" HorizontalAlignment="Center" Margin="0,15,20,0" BorderBrush="{x:Null}" Background="#FF158703">
                     <TextBlock Text="Start" HorizontalAlignment="Center" FontFamily="{DynamicResource {x:Static SystemFonts.CaptionFontFamilyKey}}" FontWeight="Bold" />
                 </Button>
-                <Button x:Name="BtnStop" RenderTransformOrigin="0.5,0.5" FontSize="14" Foreground="#FFF38181" Click="Stop_Click" Width="129" HorizontalAlignment="Center" Margin="0,15,0,0" BorderBrush="{x:Null}" Background="#FF950C0C">
-                    <TextBlock Text="Stop" HorizontalAlignment="Center" FontFamily="{DynamicResource {x:Static SystemFonts.CaptionFontFamilyKey}}" FontWeight="Bold" />
+                <Button x:Name="BtnStop" RenderTransformOrigin="0.5,0.5" FontSize="14" Foreground="#FFF38181" Click="Stop_Click" Width="129" HorizontalAlignment="Center" Margin="0,15,20,0" BorderBrush="{x:Null}" Background="#FF950C0C">
+                    <TextBlock Text="Cancel" HorizontalAlignment="Center" FontFamily="{DynamicResource {x:Static SystemFonts.CaptionFontFamilyKey}}" FontWeight="Bold" />
+                </Button>
+                <Button x:Name="BtnRetry" RenderTransformOrigin="0.5,0.5" FontSize="14" Foreground="#FF232304"  Width="129" HorizontalAlignment="Center" Margin="0,15,0,0" BorderBrush="{x:Null}" Background="#FFFFF800" Click="BtnRetry_Click">
+                    <TextBlock Text="Retry" HorizontalAlignment="Center" FontFamily="{DynamicResource {x:Static SystemFonts.CaptionFontFamilyKey}}" FontWeight="Bold" />
                 </Button>
             </StackPanel>
             <ScrollViewer Height="250" Foreground="#FFCBCBCB" Margin="0">

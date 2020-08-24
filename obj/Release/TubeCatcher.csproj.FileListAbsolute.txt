@@ -15,3 +15,4 @@ C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Release\TubeCatcher.cspr
 C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Release\TubeCatcher.csproj.CopyComplete
 C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Release\TubeCatcher.exe
 C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Release\TubeCatcher.pdb
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Release\TubeCatcher.csprojAssemblyReference.cache
