@@ -1,7 +1,6 @@
 # TubeCatcher
 
 **TubeCatcher**  is a gui application for Linux and Windows to download videos from YouTube along with YouTube's playlist. I am developing(its under development) it to download YouTube Tutorial videos to play them in offline.
-
 # Operation Manual
 
 ## Downloading Videos
@@ -21,7 +20,4 @@ copy the YouTube video URL and paste it to the box.
 
  1. save the current progress of downloading huge playlist
  2. resume from the saved progress
- 3. Auto playlist url sensing
- 4. Full playlist download with a click
- 5. make it stand alone application
  
