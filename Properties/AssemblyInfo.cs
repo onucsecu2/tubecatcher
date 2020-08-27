@@ -8,7 +8,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("TubeCatcher")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Youtube Video downloading tool")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("TubeCatcher")]
