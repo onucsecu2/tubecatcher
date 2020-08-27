@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -44,12 +45,25 @@ namespace TubeCatcher
             BtnRetry.IsEnabled = false;
             path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             path += "\\Videos";
+          
             this.Dispatcher.Invoke(() =>
             {
-                myTextBlock.Text = path;
+                output.Text = "Output : " + path;
+            });
+            //dummy_list_for_test();
+        }
+        private void dummy_list_for_test()
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+
+                myItem.Add(new MyItem { SLNum = 0, Status = "status_str", Name = "dummy", Size = "--", Percent = "--" });
+                myItem.Add(new MyItem { SLNum = 0, Status = "status_str", Name = "dummy", Size = "--", Percent = "--" });
+                myItem.Add(new MyItem { SLNum = 0, Status = "status_str", Name = "dummy", Size = "--", Percent = "--" });
+                myItem.Add(new MyItem { SLNum = 0, Status = "status_str", Name = "dummy", Size = "--", Percent = "--" });
+                myItem.Add(new MyItem { SLNum = 0, Status = "status_str", Name = "dummy", Size = "--", Percent = "--" });
             });
         }
-
         private void Start_Click(object sender, RoutedEventArgs e)
         {
             initialize();
@@ -58,6 +72,7 @@ namespace TubeCatcher
             {
                 myTextBlock.Text = "Connecting...";
             });
+
             if (state == 0)
             {
                 args1 = url.Text + " -i --get-filename --restrict-filenames";
@@ -67,51 +82,79 @@ namespace TubeCatcher
             {
                 args1 = url.Text + " -i --playlist-start " + start_num.Text.ToString() + " --playlist-end " + end_num.Text.ToString() + " --get-filename --restrict-filenames";
                 args2 = url.Text + " -i --restrict-filenames --playlist-start " + start_num.Text + " --playlist-end " + end_num.Text;
-            } 
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            //strCommand is path and file name of command to run
-            startInfo.FileName = youtube_dl;
-            
-            //strCommandParameters are parameters to pass to program
-            startInfo.Arguments = args1;
+            }
 
-            startInfo.UseShellExecute = false;
-            startInfo.CreateNoWindow = true;
-            //Set output of program to be written to process output stream
-            startInfo.RedirectStandardOutput = true;
-            startInfo.RedirectStandardError = true;
-            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            startInfo.RedirectStandardInput = true;
+            if (!checkUrl())
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    BtnStop.IsEnabled = false;
+                    BtnRetry.IsEnabled = false;
+                    BtnStart.IsEnabled = true;
+                    myTextBlock.Text = "url not found";
+                });
 
-            pProcess.StartInfo = startInfo;
-            string status_str = "Queuing";
-            thread_youtube_dl_collect_data= new Thread(()=>this.youtube_dl_collect_data(status_str));
-            thread_youtube_dl_collect_data.Name = "thread1";
-            thread_youtube_dl_collect_data.Start();
+            }
+            else
+            {
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                //strCommand is path and file name of command to run
+                startInfo.FileName = youtube_dl;
+
+                //strCommandParameters are parameters to pass to program
+                startInfo.Arguments = args1;
+
+                startInfo.UseShellExecute = false;
+                startInfo.CreateNoWindow = true;
+                //Set output of program to be written to process output stream
+                startInfo.RedirectStandardOutput = true;
+                startInfo.RedirectStandardError = true;
+                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                startInfo.RedirectStandardInput = true;
+
+                pProcess.StartInfo = startInfo;
+                string status_str = "Queuing";
+                thread_youtube_dl_collect_data = new Thread(() => this.youtube_dl_collect_data(status_str));
+                thread_youtube_dl_collect_data.Name = "thread1";
+                thread_youtube_dl_collect_data.Start();
 
 
 
-            ProcessStartInfo startInfo1 = new ProcessStartInfo();
-            //strCommand is path and file name of command to run
-            startInfo1.FileName = youtube_dl;
-            startInfo1.UseShellExecute = false;
-            startInfo1.CreateNoWindow = true;
-            //Set output of program to be written to process output stream
-            startInfo1.RedirectStandardOutput = true;
-            startInfo1.RedirectStandardError = true;
-            startInfo1.WindowStyle = ProcessWindowStyle.Hidden;
-            qProcess.StartInfo = startInfo1;
-            qProcess.StartInfo.Arguments = args2;
-            thread_youtube_dl_download=new Thread( youtube_dl_download);
-            thread_youtube_dl_download.Name = "thread2";
-            thread_youtube_dl_download.Start();
+                ProcessStartInfo startInfo1 = new ProcessStartInfo();
+                //strCommand is path and file name of command to run
+                startInfo1.FileName = youtube_dl;
+                startInfo1.UseShellExecute = false;
+                startInfo1.CreateNoWindow = true;
+                //Set output of program to be written to process output stream
+                startInfo1.RedirectStandardOutput = true;
+                startInfo1.RedirectStandardError = true;
+                startInfo1.WindowStyle = ProcessWindowStyle.Hidden;
+                qProcess.StartInfo = startInfo1;
+                qProcess.StartInfo.Arguments = args2;
+                thread_youtube_dl_download = new Thread(youtube_dl_download);
+                thread_youtube_dl_download.Name = "thread2";
+                thread_youtube_dl_download.Start();
 
-            thread_move_downloaded_files = new Thread(move_files);
-            thread_move_downloaded_files.Name = "thread3";
-            thread_move_downloaded_files.Start();
+                thread_move_downloaded_files = new Thread(move_files);
+                thread_move_downloaded_files.Name = "thread3";
+                thread_move_downloaded_files.Start();
+            }
         }
 
+        private bool checkUrl()
+        {
+            HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create("https://www.youtube.com/oembed?format=json&url="+url.Text);
+            // Assign the response object of 'HttpWebRequest' to a 'HttpWebResponse' variable.
 
+            if (myHttpWebRequest.Headers.ToString() == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
         private void youtube_dl_collect_data(string status_str)
         {
 
@@ -420,6 +463,11 @@ namespace TubeCatcher
                 });
             }
 
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(path);
         }
 
         private void BtnRetry_Click(object sender, RoutedEventArgs e)
