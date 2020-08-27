@@ -15,8 +15,71 @@
             <ColumnDefinition Width="400*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical" Grid.ColumnSpan="3" Background="#FF3A3A3A">
-            <TextBox x:Name="url" Margin="0,15,0,0" Background="#FF878787" Foreground="White" Height="90" TextChanged="url_TextChanged" />
-            <Label Margin="0,20,0,0" Content="Playlist Information :" Cursor="No" FontFamily="Segoe UI Black" FontWeight="Bold" Background="{x:Null}" Foreground="#FFCDCDCD" />
+            <TextBox x:Name="url" Margin="0,15,0,0" Background="#FF878787" Foreground="White" Height="30" TextChanged="url_TextChanged" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+                <TextBlock  x:Name="output" Margin="0,10,0,0" TextWrapping="Wrap"  FontWeight="Bold" Foreground="#FFBBBBBB"/>
+                <Button Margin="10,0,0,0"  Background="Transparent" BorderBrush="#00000000" Click="Button_Click" Style="{DynamicResource ButtonStyle1}">
+                    <Button.Resources>
+                        <Style x:Key="FocusVisual">
+                            <Setter Property="Control.Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+                        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+                        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+                        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+                        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+                        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+                        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+                        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+                        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+                        <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
+                            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+                            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Setter Property="Padding" Value="1"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsDefaulted" Value="true">
+                                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="true">
+                                                <Setter Property="Background" TargetName="border" Value="#FF6C5C5F"/>
+                                                <Setter Property="Cursor" Value="Hand"/>
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="true">
+                                                <Setter Property="Background" TargetName="border" Value="#FF6C5C5F"/>
+
+                                            </Trigger>
+                                            <Trigger Property="IsEnabled" Value="false">
+                                                <Setter Property="Background" TargetName="border" Value="#FF6C5C5F"/>
+
+                                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Resources>
+                    <Image Source="folder.png" Width="20" Height="20"/>
+                </Button>
+            </StackPanel>
+            <Label Margin="0,5,0,0" Content="Playlist Information :" Cursor="No" FontFamily="Segoe UI Black" FontWeight="Bold" Background="{x:Null}" Foreground="#FFCDCDCD" />
             <StackPanel  Orientation="Horizontal" HorizontalAlignment="Center" Grid.ColumnSpan="1" >
                 <StackPanel Margin="0,0,30,0" Orientation="Horizontal" HorizontalAlignment="Left" >
                     <CheckBox IsEnabled="False" Checked="playlist_Checked" Unchecked="playlist_Unchecked" x:Name="playlist" Background="Gray" HorizontalAlignment="Center">
@@ -33,32 +96,200 @@
                 </StackPanel>
             </StackPanel>
             <Grid Margin="0,15,0,0">
-            <ProgressBar x:Name="progressbar" Minimum="0" Maximum="100" Height="17" Value="0"  Foreground="#FF00BB33" Background="#FF6C6C6C" BorderBrush="{x:Null}"></ProgressBar>
-            <TextBlock Text="{Binding ElementName=pbStatus, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <ProgressBar x:Name="progressbar" Minimum="0" Maximum="100" Height="17" Value="0"  Foreground="#FF00BB33" Background="#FF6C6C6C" BorderBrush="{x:Null}"></ProgressBar>
+                <TextBlock Text="{Binding ElementName=pbStatus, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Grid>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button x:Name="BtnStart" RenderTransformOrigin="0.5,0.5" FontSize="14" Foreground="#FFCBCBCB" Click="Start_Click" Width="129" HorizontalAlignment="Center" Margin="0,15,20,0" BorderBrush="{x:Null}" Background="#FF158703">
+                <Button x:Name="BtnStart" RenderTransformOrigin="0.5,0.5" FontSize="14" Foreground="#FFCBCBCB" Click="Start_Click" Width="129" HorizontalAlignment="Center" Margin="0,15,20,0" BorderBrush="{x:Null}" Background="#FF158703" Style="{DynamicResource ButtonStyle1}">
+                    <Button.Resources>
+                        <Style x:Key="FocusVisual">
+                            <Setter Property="Control.Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+                        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+                        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+                        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+                        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+                        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+                        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+                        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+                        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+                        <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
+                            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+                            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Setter Property="Padding" Value="1"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsDefaulted" Value="true">
+                                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="true">
+                                                <Setter Property="Background" TargetName="border" Value="#FF016100"/>
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="true">
+                                                <Setter Property="Background" TargetName="border" Value="#FF014100"/>
+                                            </Trigger>
+                                            <Trigger Property="IsEnabled" Value="false">
+                                                <Setter Property="Background" TargetName="border" Value="#FF012100"/>
+                                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="#2E2e2e"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Resources>
                     <TextBlock Text="Start" HorizontalAlignment="Center" FontFamily="{DynamicResource {x:Static SystemFonts.CaptionFontFamilyKey}}" FontWeight="Bold" />
                 </Button>
-                <Button x:Name="BtnStop" RenderTransformOrigin="0.5,0.5" FontSize="14" Foreground="#FFF38181" Click="Stop_Click" Width="129" HorizontalAlignment="Center" Margin="0,15,20,0" BorderBrush="{x:Null}" Background="#FF950C0C">
+                <Button x:Name="BtnStop" RenderTransformOrigin="0.5,0.5" FontSize="14" Foreground="#FFF38181" Click="Stop_Click" Width="129" HorizontalAlignment="Center" Margin="0,15,20,0" BorderBrush="{x:Null}" Background="#FF950C0C" Style="{DynamicResource ButtonStyle1}">
+                    <Button.Resources>
+                        <Style x:Key="FocusVisual">
+                            <Setter Property="Control.Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+                        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+                        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+                        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+                        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+                        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+                        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+                        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+                        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+                        <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
+                            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+                            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Setter Property="Padding" Value="1"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsDefaulted" Value="true">
+                                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="true">
+                                                <Setter Property="Background" TargetName="border" Value="#FF800000"/>
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="true">
+                                                <Setter Property="Background" TargetName="border" Value="#FF700000"/>
+
+                                            </Trigger>
+                                            <Trigger Property="IsEnabled" Value="false">
+                                                <Setter Property="Background" TargetName="border" Value="#FF500000"/>
+
+                                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Resources>
                     <TextBlock Text="Cancel" HorizontalAlignment="Center" FontFamily="{DynamicResource {x:Static SystemFonts.CaptionFontFamilyKey}}" FontWeight="Bold" />
                 </Button>
-                <Button x:Name="BtnRetry" RenderTransformOrigin="0.5,0.5" FontSize="14" Foreground="#FF232304"  Width="129" HorizontalAlignment="Center" Margin="0,15,0,0" BorderBrush="{x:Null}" Background="#FFFFF800" Click="BtnRetry_Click">
+                <Button x:Name="BtnRetry" RenderTransformOrigin="0.5,0.5" FontSize="14" Foreground="#FF232304"  Width="129" HorizontalAlignment="Center" Margin="0,15,0,0" BorderBrush="{x:Null}" Background="#FFFFF800" Click="BtnRetry_Click" Style="{DynamicResource ButtonStyle1}">
+                    <Button.Resources>
+                        <Style x:Key="FocusVisual">
+                            <Setter Property="Control.Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+                        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+                        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+                        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+                        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+                        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+                        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+                        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+                        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+                        <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
+                            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+                            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Setter Property="Padding" Value="1"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsDefaulted" Value="true">
+                                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="true">
+                                                <Setter Property="Background" TargetName="border" Value="#FFF8A000"/>
+
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="true">
+                                                <Setter Property="Background" TargetName="border" Value="#FFF88100"/>
+
+                                            </Trigger>
+                                            <Trigger Property="IsEnabled" Value="false">
+                                                <Setter Property="Background" TargetName="border" Value="#FFF08000"/>
+
+                                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Resources>
                     <TextBlock Text="Retry" HorizontalAlignment="Center" FontFamily="{DynamicResource {x:Static SystemFonts.CaptionFontFamilyKey}}" FontWeight="Bold" />
                 </Button>
             </StackPanel>
-            <ScrollViewer Height="250" Foreground="#FFCBCBCB" Margin="0">
-                <ListView  Name="lvFiles" FontFamily="Segoe UI Black" Foreground="#FFC3C3C3"  BorderBrush="#FFC3C3C3" Background="{x:Null}" IsSynchronizedWithCurrentItem="False" Margin="0,15,0,0">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="No"  Width="50" DisplayMemberBinding="{Binding SLNum}"/>
-                        <GridViewColumn Header="Status" Width="100" DisplayMemberBinding="{Binding Status}"/>
-                        <GridViewColumn Header="File" Width="600" DisplayMemberBinding="{Binding Name}" />
-                        <GridViewColumn Header="Size" Width="100" DisplayMemberBinding="{Binding Size}"  />
-                        <GridViewColumn Header="Percent" Width="100" DisplayMemberBinding="{Binding Percent}" />
-                    </GridView>
-                </ListView.View>
-            </ListView>
+            <ScrollViewer Height="250" Foreground="#FF404040" Margin="0">
+                <ListView  Name="lvFiles" FontFamily="Segoe UI Black" Foreground="#FFCBCBCB"  BorderBrush="#FFC3C3C3" Background="{x:Null}" IsSynchronizedWithCurrentItem="False" Margin="0,15,0,0">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="No"  Width="50" DisplayMemberBinding="{Binding SLNum}"/>
+                            <GridViewColumn Header="Status" Width="100" DisplayMemberBinding="{Binding Status}"/>
+                            <GridViewColumn Header="File" Width="600" DisplayMemberBinding="{Binding Name}" />
+                            <GridViewColumn Header="Size" Width="100" DisplayMemberBinding="{Binding Size}"  />
+                            <GridViewColumn Header="Percent" Width="100" DisplayMemberBinding="{Binding Percent}" />
+                        </GridView>
+                    </ListView.View>
+
+                </ListView>
             </ScrollViewer>
             <!--<ScrollViewer Height="250" Foreground="#FFCBCBCB">
                 <ListView Margin="0,15,0,0"  Name="lvFiles" FontWeight="Bold" FontFamily="Segoe UI Black" Foreground="#FFC3C3C3" BorderBrush="#FF2E2E2E" Background="{x:Null}" IsSynchronizedWithCurrentItem="False" >

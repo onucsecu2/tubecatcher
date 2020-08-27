@@ -15,3 +15,5 @@ C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\TubeCatcher.csproj
 C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\TubeCatcher.csproj.CopyComplete
 C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\TubeCatcher.exe
 C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\TubeCatcher.pdb
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\TubeCatcher.csprojAssemblyReference.cache
+C:\Users\onucs\source\repos\TubeCatcher\TubeCatcher\obj\Debug\App.baml
