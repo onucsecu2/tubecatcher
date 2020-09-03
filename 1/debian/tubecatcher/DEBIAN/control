@@ -1,0 +1,9 @@
+Package: tubecatcher
+Version: 1.0.1
+Architecture: amd64
+Maintainer: Ibrahim Khalil <onucsecu@gmail.com>
+Installed-Size: 30148
+Pre-Depends: dpkg (>= 1.16.1), python
+Section: python
+Priority: extra
+Description: Youtube video downloading tool

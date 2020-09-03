@@ -1,0 +1,4 @@
+#!/bin/sh
+pip3 install pygobject
+pip3 install pycairo
+pip3 install youtube_dl

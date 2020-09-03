@@ -1,0 +1,13 @@
+Package: tubecatcher-dbgsym
+Package-Type: ddeb
+Source: tubecatcher
+Version: 1.0.1
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: Ibrahim Khalil <onucsecu@gmail.com>
+Installed-Size: 5311
+Depends: tubecatcher (= 1.0.1)
+Section: debug
+Priority: optional
+Description: debug symbols for tubecatcher
+Build-Ids: 8c20b4d616f2e88b18a9e8a0339601ac3edfd5f0 9f3470a8d6d4b2b681660aa0012da705f82598bd af17cbefa09e7c626f358efa24a549b09a91a03f cd8f23b9a24de6d9eaf6a04cec1763389f84bab2
